@@ -1,26 +1,22 @@
+from transformers import pipeline
 from fastapi import FastAPI, Response
-import uvicorn
 from pydantic import BaseModel
 
-from transformers import pipeline
+generator = pipeline('text-generation', model='gpt2')
 
-app= FastAPI(title="CI/CD Deployment of HuggingFace Translator EN to DE")
+app = FastAPI()
 
-translate= pipeline('translation', model='Helsinki-NLP/opus-mt-en-de')
 
-class Phrase(BaseModel):
+class Body(BaseModel):
     text: str
 
-#@app.on_event("startup")
-#def load_model():
-    #global translate
-    #translate= pipeline('translation', model='Helsinki-NLP/opus-mt-en-de')
 
-@app.get("/")
-def home():
-    return Response ("Everything is going well! Please head over http://localhost:8088/docs")
+@app.get('/')
+def root():
+    return Response("<h1>A self-documenting API to interact with a GPT2 model and generate text</h1>")
 
-@app.post("/translate")
-def translate(phrase: Phrase):
-    result= translate(phrase.text)
-    return result[0]
+
+@app.post('/generate')
+def predict(body: Body):
+    results = generator(body.text, max_length=35, num_return_sequences=1)
+    return results[0]
