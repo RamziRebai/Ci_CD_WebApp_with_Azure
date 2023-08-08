@@ -1,8 +1,15 @@
-FROM python:3.7-slim-buster
+FROM python:3.8
+
+COPY ./requirements.txt /app/requirements.txt
+
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt && \
-        rm requirements.txt
+
+RUN pip install -r requirements.txt
+
+COPY app/* /app
+
 EXPOSE 8000
-COPY ./app /app
-CMD ["uvicorn", "main:app", "--port", "8000"]
+
+ENTRYPOINT [ "uvicorn" ]
+
+CMD [ "--host", "0.0.0.0", "main:app" ]
