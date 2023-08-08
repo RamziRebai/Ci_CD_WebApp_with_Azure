@@ -7,10 +7,7 @@ from transformers import pipeline
 
 app=FastAPI()
 
-@app.on_event("startup")
-def load_model():
-    global generator
-    generator= pipeline('text-generation', model='gpt2')
+generator= pipeline('text-generation', model='gpt2')
 
 class Inputss(BaseModel):
     text: str 
