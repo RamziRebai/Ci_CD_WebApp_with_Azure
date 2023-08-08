@@ -3,6 +3,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && \
         rm requirements.txt
-EXPOSE 8089
+EXPOSE 8000
 COPY ./app /app
-CMD ["uvicorn", "main:app", "--port", "8089"]
+CMD ["uvicorn", "main:app", "--port", "8000"]
